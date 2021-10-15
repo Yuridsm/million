@@ -5,11 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using TodoApi.Context;
-using TodoApi.Contracts.Services.Categories;
-using TodoApi.Contracts.Services.Products;
-using TodoApi.Services.Categories;
-using TodoApi.Services.Products;
+using TodoApi.DataModel;
+using TodoApi.Contracts.Repositories;
+using TodoApi.Repositories;
+using TodoApi.DataModel.UnitOfWork;
 
 namespace TodoApi
 {
@@ -27,11 +26,10 @@ namespace TodoApi
         {
             var sqlConnectionString = Configuration.GetConnectionString("PostgreSQL");
 
-            services.AddDbContext<DbContextApplication>(option => option.UseNpgsql(sqlConnectionString));
-            
-            services.AddScoped<DbContextApplication, DbContextApplication>();
-            services.AddScoped<ICategoryDataAccessService, CategoryService>();
-            services.AddScoped<IProductDataAccessService, ProductService>();
+            services.AddDbContext<DbContextPostgreSQL>(option => option.UseNpgsql(sqlConnectionString));
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddControllers();
 

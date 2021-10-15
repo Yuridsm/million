@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TodoApi.Models;
-using System.Collections.Generic;
-using TodoApi.Contracts.Services.Categories;
+using TodoApi.DataModel;
+using TodoApi.Contracts.Repositories;
 
 namespace TodoApi.Controllers
 {
@@ -10,34 +10,20 @@ namespace TodoApi.Controllers
     [Route("v1/[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryDataAccessService _context;
-        public CategoryController(ICategoryDataAccessService context)
+        private readonly DbContextPostgreSQL _context;
+        private readonly ICategoryRepository _categoryRepository;
+
+        public CategoryController([FromServices] DbContextPostgreSQL context, [FromServices] ICategoryRepository categoryRepository)
         {
             _context = context;
-        }
-
-        [HttpGet]
-        [Route("")]
-        public async Task<ActionResult<IEnumerable<Category>>> Get()
-        {
-            var result = await _context.GetAll();
-            if(result != null)
-                return Ok(result);
-            
-            return BadRequest("No result was found");
+            _categoryRepository = categoryRepository;
         }
 
         [HttpPost]
-        [Route("")]
-        public async Task<ActionResult<Category>> Create([FromBody] Category category)
+        public async Task Create()
         {
-            if(ModelState.IsValid)
-            {
-                var result = await _context.Create(category);
-                return Created("Create", result);
-            }
-
-            return BadRequest();
+            var category = new Category() { Title = "Teste2"};
+            await _categoryRepository.SaveAsync(category);
         }
     }
 }

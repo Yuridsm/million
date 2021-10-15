@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TodoApi.Context;
+using TodoApi.DataModel;
 using TodoApi.Models;
 
 namespace TodoApi.Controllers 
@@ -14,8 +14,8 @@ namespace TodoApi.Controllers
     [Route("v1/[controller]")]
     public class ThemeController : ControllerBase
     {
-        public readonly DbContextApplication _context;
-        public ThemeController([FromServices] DbContextApplication context)
+        public readonly DbContextInMemory _context;
+        public ThemeController([FromServices] DbContextInMemory context)
         {
             _context = context;
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TodoApi.Context;
+using TodoApi.DataModel;
 using TodoApi.Contracts.Services.Products;
 using TodoApi.Models;
 
@@ -12,9 +12,9 @@ namespace TodoApi.Services.Products
 {
     public class ProductService : IProductDataAccessService
     {
-        private readonly DbContextApplication _context;
+        private readonly DbContextInMemory _context;
 
-        public ProductService(DbContextApplication context)
+        public ProductService(DbContextInMemory context)
         {
             _context = context;
         }
